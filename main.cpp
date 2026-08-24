@@ -8,6 +8,8 @@ struct transaction_req {
     double cpu, ram, mem;
 };
 
+double readPositiveDouble(const std::string& prompt);
+
 int main() {
 
     std::string config_path = std::string(PROJECT_ROOT) + "/config.yaml"; //namiesto yaml chcel som pouzit base triedu a kazda nova transakcia by bola potomkom base transakcie
@@ -22,19 +24,29 @@ int main() {
     }
     double tx_number, time_limit;
     std::string tx_type;
-    std::cout << "This is a hardware calculator." << std::endl << "Enter number of transactions: " <<std::endl;
-    std::cin >> tx_number;
+    std::cout << "This is a hardware calculator." << std::endl;
+    tx_number = readPositiveDouble("Enter the number of transactions: ");
     std::cout << "Enter transaction type: ";
     std::cin >> tx_type;
     while (transaction_types.find(tx_type) == transaction_types.end()) {
         std::cout << "Unknown transaction type. Please try again: " << std::endl;
         std::cin >> tx_type;
     }
-    std::cout << "What is the time limit to finish all transactions in minutes?" << std::endl;
-    std::cin >> time_limit;
+    time_limit = readPositiveDouble("What is the time limit to finish all transactions in minutes?");
     double cpu_time = tx_number * transaction_types[tx_type].cpu;
     double cores_num = std::ceil((( cpu_time / 1000 )/ (time_limit*60))*1.2);
     double ram = cores_num * transaction_types[tx_type].ram;
     double memory = tx_number * transaction_types[tx_type].mem;
     std::cout << "You will need " << cores_num << " cores, " << ram /1000 << " MB of RAM and " << memory / 1000 <<" MB of memory"<<   std::endl;
+}
+
+double readPositiveDouble(const std::string& prompt) {
+    double value;
+    std::cout << prompt;
+    while (!(std::cin >> value) || value <= 0) {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Please enter a positive number: ";
+    }
+    return value;
 }
