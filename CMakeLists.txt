@@ -10,10 +10,9 @@ include(FetchContent)
 FetchContent_Declare(
         yaml-cpp
         GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
-        GIT_TAG master
+        GIT_TAG yaml-cpp-0.9.0
 )
 FetchContent_MakeAvailable(yaml-cpp)
 
-find_package(yaml-cpp REQUIRED)
 target_link_libraries(homework PRIVATE yaml-cpp::yaml-cpp)
 target_compile_definitions(homework PRIVATE PROJECT_ROOT="${CMAKE_SOURCE_DIR}")
