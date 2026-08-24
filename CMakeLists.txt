@@ -1,7 +1,19 @@
-cmake_minimum_required(VERSION 4.3)
-project(innovatrics_homework)
+cmake_minimum_required(VERSION 3.16)
+project(homework)
 
 
-add_executable(innovatrics_homework main.cpp
+add_executable(homework main.cpp
         )
-target_include_directories(innovatrics_homework PRIVATE include)
+target_include_directories(homework PRIVATE include)
+
+include(FetchContent)
+FetchContent_Declare(
+        yaml-cpp
+        GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
+        GIT_TAG master
+)
+FetchContent_MakeAvailable(yaml-cpp)
+
+find_package(yaml-cpp REQUIRED)
+target_link_libraries(homework PRIVATE yaml-cpp::yaml-cpp)
+target_compile_definitions(homework PRIVATE PROJECT_ROOT="${CMAKE_SOURCE_DIR}")

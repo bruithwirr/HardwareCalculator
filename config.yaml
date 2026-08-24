@@ -1,0 +1,13 @@
+transactions:
+  - type: READ
+    cpu: 20 #in ms
+    ram: 20 #in kB
+    mem: 1 #in kB
+  - type: WRITE
+    cpu: 40
+    ram: 40
+    mem: 500
+  - type: COMPUTE
+    cpu: 100
+    ram: 50
+    mem: 400
