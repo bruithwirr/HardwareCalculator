@@ -47,7 +47,7 @@ From the project root, run:
 ./build/hardware_calc
 ```
 
-The application assumes that config.yaml is in it's default location in the HardwareCalculator directory.
+The application assumes that `config.yaml` is in it's default location in the HardwareCalculator directory.
 
 Your own path to the configuration file can also be provided:
 
