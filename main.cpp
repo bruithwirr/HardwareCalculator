@@ -1,24 +1,26 @@
 #include <iostream>
 #include <yaml-cpp/yaml.h>
 #include <unordered_map>
-#include <cmath>
-#include <limits>
 
 
-struct transaction_req {
-    double cpu, ram, disc;
-};
+#include "hardware_calculations.h"
 
-double readPositiveDouble(const std::string& prompt);
-int readPositiveInt(const std::string& prompt);
+
+
 
 int main(int argc, char* argv[]) {
     std::string config_path;
-    if (argc ==2) {
+
+    if (argc > 2) {
+        std::cerr << "Usage: " << argv[0] << " [config-file]\n";
+        return 1;
+    }
+
+    if (argc == 2) {
         config_path = argv[1];
     }
     else {
-        config_path = std::string(PROJECT_ROOT) + "/config.yaml";
+        config_path ="/config.yaml";
     }
 
     std::unordered_map<std::string, transaction_req> transaction_types;
@@ -40,44 +42,29 @@ int main(int argc, char* argv[]) {
     }
 
 
-    double tx_number, time_limit;
+
+
     std::string tx_type;
     std::cout << "This is a hardware sizing calculator." << std::endl;
-    tx_number = readPositiveInt("Enter the number of transactions: ");
+    int tx_number = readPositiveInt("Enter the number of transactions: ");
     std::cout << "Enter transaction type: ";
     std::cin >> tx_type;
     while (transaction_types.find(tx_type) == transaction_types.end()) {
         std::cout << "Unknown transaction type. Please try again: " << std::endl;
         std::cin >> tx_type;
     }
-    time_limit = readPositiveDouble("What is the time limit to finish all transactions in minutes?: ");
-    double cpu_time = tx_number * transaction_types[tx_type].cpu;
-    double cores_num = std::ceil((( cpu_time / 1000 )/ (time_limit*60))*safety_margin);
-    double ram = cores_num * transaction_types[tx_type].ram * safety_margin;
-    double disc_space = tx_number * transaction_types[tx_type].disc * safety_margin;
+    double time_limit = readPositiveDouble("What is the time limit to finish all transactions in minutes?: ");
+
+    auto tx = transaction_types[tx_type];
+
+    double cores_num = calculateCPUCores(tx_number, tx.cpu, time_limit, safety_margin);
+    double ram = calculateRAM(cores_num, tx.ram, safety_margin);
+    double disc_space = calculateDiscSpace(tx_number, tx.disc, safety_margin);
+
     std::cout << "You will need " << cores_num << " cores, " << ram /1000 << " MB of RAM and " << disc_space / 1000 <<" MB of disk space"<<   std::endl;
 
     return 0;
 }
 
-double readPositiveDouble(const std::string& prompt) {
-    double value;
-    std::cout << prompt;
-    while (!(std::cin >> value) || value <= 0) {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Please enter a positive number: ";
-    }
-    return value;
-}
 
-int readPositiveInt(const std::string& prompt) {
-    double value;
-    std::cout << prompt;
-    while (!(std::cin >> value) || value <= 0) {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Please enter a positive integer: ";
-    }
-    return std::ceil(value);
-}
+

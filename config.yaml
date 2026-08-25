@@ -2,14 +2,14 @@ safety_margin: 1.2
 
 transactions:
   - type: READ
-    cpu: 20 #in ms
-    ram: 1000 #in kB
-    disc: 1 #in kB
+    cpu: 20 #CPU time in ms per transaction
+    ram: 1000 #kB per core
+    disc: 1 #in kB per transaction
   - type: WRITE
     cpu: 40
-    ram: 40
+    ram: 4000
     disc: 500
   - type: COMPUTE
     cpu: 100
-    ram: 50
+    ram: 7000
     disc: 400

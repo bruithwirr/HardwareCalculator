@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.16)
-project(homework)
+project(harware_calc)
 
 
-add_executable(homework main.cpp
-        )
-target_include_directories(homework PRIVATE include)
+add_executable(hardware_calc main.cpp)
+
+target_include_directories(hardware_calc PRIVATE include)
 
 include(FetchContent)
 FetchContent_Declare(
@@ -14,5 +14,27 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(yaml-cpp)
 
-target_link_libraries(homework PRIVATE yaml-cpp::yaml-cpp)
-target_compile_definitions(homework PRIVATE PROJECT_ROOT="${CMAKE_SOURCE_DIR}")
+FetchContent_Declare(
+        googletest
+        GIT_REPOSITORY https://github.com/google/googletest.git
+        GIT_TAG v1.17.0
+)
+
+FetchContent_MakeAvailable(googletest)
+
+target_link_libraries(hardware_calc PRIVATE yaml-cpp::yaml-cpp)
+
+enable_testing()
+
+add_executable(hardware_calc_tests
+        tests/test_calculator.cpp
+)
+
+target_link_libraries(hardware_calc_tests
+        PRIVATE GTest::gtest_main
+)
+
+target_include_directories(hardware_calc_tests PRIVATE include)
+
+include(GoogleTest)
+gtest_discover_tests(hardware_calc_tests)
