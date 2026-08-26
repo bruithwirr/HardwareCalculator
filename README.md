@@ -74,11 +74,6 @@ transactions:
     cpu: 40
     ram: 2000
     disc: 10
-
-  - type: MIXED
-    cpu: 60
-    ram: 3000
-    disc: 20
 ```
 
 The units used by the calculator are:
