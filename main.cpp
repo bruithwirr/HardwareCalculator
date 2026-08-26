@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
         config_path = argv[1];
     }
     else {
-        config_path ="/config.yaml";
+        config_path ="../config.yaml";
     }
 
     std::unordered_map<std::string, transaction_req> transaction_types;
