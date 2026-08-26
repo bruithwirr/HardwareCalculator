@@ -39,6 +39,7 @@ cmake --build build
 
 The executable will be created in the `build` directory.
 
+
 ## Running
 
 From the project root, run:
@@ -47,9 +48,9 @@ From the project root, run:
 ./build/hardware_calc
 ```
 
-The application assumes that `config.yaml` is in it's default location in the HardwareCalculator directory.
+By default, the application looks for `config.yaml` in the current working directory.
 
-Your own path to the configuration file can also be provided:
+A different configuration file can also be provided:
 
 ```bash
 ./build/hardware_calc ~/my_files/example/my_config.yaml
@@ -72,8 +73,13 @@ transactions:
 
   - type: WRITE
     cpu: 40
-    ram: 2000
-    disc: 10
+    ram: 4000
+    disc: 500
+
+  - type: COMPUTE
+    cpu: 100
+    ram: 7000
+    disc: 400
 ```
 
 The units used by the calculator are:
@@ -85,6 +91,27 @@ The units used by the calculator are:
 
 Transaction types can be added or modified without changing the calculation code.
 
+## Running with Docker
+
+The project can also be built and run without installing a compiler, CMake, or any dependencies locally.
+
+Build the image from the project root:
+
+```bash
+docker build -t hardware-calc .
+```
+
+Run it interactively:
+
+```bash
+docker run -it --rm hardware-calc
+```
+
+To use a different configuration file without rebuilding the image, mount it in at runtime:
+
+```bash
+docker run -it --rm -v /path/to/my_config.yaml:/app/config.yaml hardware-calc
+````
 ## Assumptions
 
 This application is an estimation tool rather than a benchmark.
